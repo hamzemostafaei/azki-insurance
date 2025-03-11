@@ -1,20 +1,17 @@
 package com.azki.insurance.domain.core.exception;
 
+import com.azki.insurance.common.core.data.ErrorDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class DomainException extends RuntimeException {
-
-    public DomainException(String message) {
-        super(message);
-    }
-
-    public DomainException(Throwable cause) {
-        super(cause);
-    }
-
-    public DomainException(String pattern, Object... args) {
-        this(String.format(pattern, args));
-    }
-
-    public DomainException(String pattern, Throwable cause, Object... args) {
-        super(String.format(pattern, args), cause);
-    }
+    protected List<ErrorDTO> errors;
 }

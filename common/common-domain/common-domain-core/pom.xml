@@ -11,5 +11,11 @@
 
     <artifactId>common-domain-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.azki.insurance</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

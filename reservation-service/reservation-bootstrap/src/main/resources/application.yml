@@ -22,6 +22,9 @@ spring:
         session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 100
   aop:
     proxy-target-class: false
+  threads:
+    virtual:
+      enabled: true
 
 com:
   azki:

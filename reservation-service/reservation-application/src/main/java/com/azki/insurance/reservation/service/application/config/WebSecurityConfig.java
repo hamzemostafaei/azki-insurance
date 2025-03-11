@@ -28,7 +28,10 @@ public class WebSecurityConfig {
                 .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((requests) -> requests.anyRequest().authenticated())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api/security/user").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults())

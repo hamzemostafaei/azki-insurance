@@ -12,4 +12,15 @@
     <artifactId>common-domain-application-api</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azki.insurance</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
