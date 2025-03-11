@@ -17,6 +17,21 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
+    <logger name="org.hibernate.SQL" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.hibernate.orm.jdbc.bind" additivity="false">
+        <level value="trace"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.hibernate.orm.jdbc.extract" additivity="false">
+        <level value="trace"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
     <logger name="org.hibernate.SQL_SLOW" additivity="false">
         <level value="debug"/>
         <appender-ref ref="STDOUT"/>

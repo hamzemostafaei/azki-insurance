@@ -17,4 +17,9 @@ public class UsersJpaAdapterImpl extends BaseJpaAdapterImpl<UserDTO,
                                                             UserCriteriaDTO,
                                                             UserJpaRepository>
         implements UserRepository {
+
+    @Override
+    public Boolean existsByUsernameOrEmail(String username, String email) {
+        return repository.existsByUsernameOrEmail(username, email);
+    }
 }

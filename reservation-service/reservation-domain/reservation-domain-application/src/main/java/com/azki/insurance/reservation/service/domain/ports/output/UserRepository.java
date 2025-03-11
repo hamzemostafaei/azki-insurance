@@ -5,4 +5,6 @@ import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.query.UserCriteriaDTO;
 
 public interface UserRepository extends Repository<UserDTO, Integer, UserCriteriaDTO> {
+
+    Boolean existsByUsernameOrEmail(String username, String email);
 }

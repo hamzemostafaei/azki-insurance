@@ -10,7 +10,6 @@ import com.azki.insurance.domain.input.BaseCommandHandler;
 import com.azki.insurance.reservation.service.domain.api.command.CreateUserCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.exception.ReservationDomainException;
-import com.azki.insurance.reservation.service.domain.api.query.UserCriteriaDTO;
 import com.azki.insurance.reservation.service.domain.ports.output.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,33 +30,33 @@ public class CreateUserCommandHandlerImpl extends BaseCommandHandler<CreateUserC
     @Override
     protected CommandResult<UserDTO> execute(CreateUserCommand command) {
 
-        UserCriteriaDTO criteria = new UserCriteriaDTO();
-        criteria.setUsernameEquals(command.getUserName());
+        validateUserUniqueness(command);
 
-        boolean exists = userRepository.exists(criteria);
+        UserDTO newUser = createUser(command);
+        newUser = userRepository.save(newUser);
 
+        return CommandResult.success(newUser);
+    }
+
+    private void validateUserUniqueness(CreateUserCommand command) {
+        Boolean exists = userRepository.existsByUsernameOrEmail(command.getUserName(), command.getEmail());
         if (exists) {
             throw new ReservationDomainException(List.of(new ErrorDTO(
                     ErrorCodeEnum.DUPLICATE_DATA,
                     "User already exists",
-                    "User")
-            ));
+                    "User"
+            )));
         }
+    }
 
+    private UserDTO createUser(CreateUserCommand command) {
         long userId = SnowFlakeUniqueIDGenerator.getGenerator(configData.nodeId()).nextId();
 
-        UserDTO user = UserDTO.builder()
+        return UserDTO.builder()
                 .userId(userId)
                 .username(command.getUserName())
                 .password(SecurityHelper.generateUserPassword(command.getUserName(), command.getPassword()))
                 .email(command.getEmail())
                 .build();
-
-        user = userRepository.save(user);
-
-        CommandResult<UserDTO> commandResult = new CommandResult<>();
-        commandResult.setData(user);
-
-        return commandResult;
     }
 }

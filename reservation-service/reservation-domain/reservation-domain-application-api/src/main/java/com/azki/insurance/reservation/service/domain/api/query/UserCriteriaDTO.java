@@ -21,4 +21,7 @@ public class UserCriteriaDTO extends BaseSearchCriteria {
 
     @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "username")
     private String usernameEquals;
+
+    @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "email")
+    private String emailEquals;
 }

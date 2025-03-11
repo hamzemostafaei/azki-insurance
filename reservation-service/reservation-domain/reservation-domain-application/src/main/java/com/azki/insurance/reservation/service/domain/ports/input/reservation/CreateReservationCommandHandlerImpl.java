@@ -26,9 +26,7 @@ public class CreateReservationCommandHandlerImpl extends BaseCommandHandler<Crea
 
         AvailableSlotsDTO resultData = availableSlotsRepository.save(reservation);
 
-        CommandResult<AvailableSlotsDTO> result = new CommandResult<>();
-        result.setData(resultData);
+        return CommandResult.success(resultData);
 
-        return result;
     }
 }
