@@ -11,5 +11,15 @@
 
     <artifactId>common-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azki.insurance</groupId>
+            <artifactId>common-utility</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    hikari:
+      pool-name: ReservationServicePool
+      driver-class-name: oracle.jdbc.OracleDriver
+      minimum-idle: 4
+      maximum-pool-size: 16
+      idle-timeout: 43200000
+      max-lifetime: 86400000
+      connection-test-query: select 1 from dual
+      register-mbeans: false
+      auto-commit: false
+    url: jdbc:oracle:thin:@//localhost:1521/ORCLPDB
+    username: AZKI_RESERVATION
+    password: 123456
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: false
+        session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 100
+  aop:
+    proxy-target-class: false
+
+com:
+  azki:
+    insurance:
+      node-id: 1
+      ignored-path-patterns:
+      serviceName: reservation-service
+      logging:
+        non-logged-paths:
+        ignored-headers:

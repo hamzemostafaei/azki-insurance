@@ -1,0 +1,31 @@
+<configuration debug="true" scan="true" scanPeriod="5 seconds">
+
+    <property name="APP_HOME" value="./reservation-service/logs"/>
+    <property name="APP_NAME" value="bpm-service"/>
+
+    <include resource="logback-common.xml"/>
+
+    <logger name="reservation-service" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.springframework.web" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.springframework.security" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.hibernate.SQL_SLOW" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="com.azki.insurance" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+
+</configuration>
