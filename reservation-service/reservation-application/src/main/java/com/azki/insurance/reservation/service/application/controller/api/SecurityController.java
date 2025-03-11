@@ -7,14 +7,26 @@ import com.azki.insurance.reservation.service.application.api.data.security.Auth
 import com.azki.insurance.reservation.service.application.api.data.security.CreateUserEdgeRequestDTO;
 import com.azki.insurance.reservation.service.application.api.data.security.CreateUserEdgeResponseDTO;
 import com.azki.insurance.reservation.service.domain.api.command.CreateUserCommand;
+import com.azki.insurance.reservation.service.domain.api.command.LoginCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Slf4j
 @RestController
@@ -23,13 +35,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecurityController {
 
     private final CommandHandler<CreateUserCommand, CommandResult<UserDTO>> createUserHandler;
+    private final CommandHandler<LoginCommand, CommandResult<UserDTO>> loginHandler;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationEdgeResponseDTO> login(@RequestBody AuthenticationEdgeRequestDTO edgeRequest) {
+    public ResponseEntity<AuthenticationEdgeResponseDTO> login(@RequestBody AuthenticationEdgeRequestDTO edgeRequest, HttpServletRequest servletRequest) {
 
         AuthenticationEdgeResponseDTO response = new AuthenticationEdgeResponseDTO();
 
-        return ResponseEntity.ok(response);
+        CommandResult<UserDTO> commandResult = loginHandler.handle(LoginCommand.builder()
+                .userName(edgeRequest.getUserName())
+                .password(edgeRequest.getPassword())
+                .build());
+
+        if (commandResult.isSuccessful()) {
+            response.setMessage("Successfully logged in");
+            UserDTO user = commandResult.getData();
+            UsernamePasswordAuthenticationToken authenticated =
+                    UsernamePasswordAuthenticationToken.authenticated(user.getUsername(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authenticated);
+
+            HttpSession session = servletRequest.getSession(true);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
     }
 
     @PostMapping("/user")

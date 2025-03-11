@@ -1,6 +1,7 @@
 package com.azki.insurance.api.data;
 
 import com.azki.insurance.common.core.data.ErrorDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class BaseEdgeResponseDTO extends BaseEdgeRequestDTO {
 
     public BaseEdgeResponseDTO() {

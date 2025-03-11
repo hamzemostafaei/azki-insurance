@@ -17,8 +17,12 @@ public final class SecurityHelper {
     private static final String PASSWORD_FORMAT = "%s|%s";
     private static final String SHA256_DIGEST_NAME = "SHA-256";
     private static final String SHA512_DIGEST_NAME = "SHA-512";
+    private static final int SHA1_LENGTH = 20;
+    private static final int SHA256_LENGTH = 32;
+    private static final int SHA512_LENGTH = 64;
 
     private static final Base64.Encoder BASE64_ENCODER = Base64.getEncoder();
+    private static final Base64.Decoder BASE64_DECODER = Base64.getDecoder();
     private static final SecureRandom PRNG = new SecureRandom();
 
     public static String generateUserPassword(String userName, String plainPassword) {
@@ -39,23 +43,12 @@ public final class SecurityHelper {
             throw new IllegalArgumentException("Non SHA-Based algorithm");
         }
 
-        String digestName;
-        switch (hashType) {
-            case Sha1:
-            case Sha1WithSalt:
-                digestName = SHA1_DIGEST_NAME;
-                break;
-            case Sha256:
-            case Sha256WithSalt:
-                digestName = SHA256_DIGEST_NAME;
-                break;
-            case Sha512:
-            case Sha512WithSalt:
-                digestName = SHA512_DIGEST_NAME;
-                break;
-            default:
-                throw new IllegalArgumentException("Bad SHA-Based algorithm");
-        }
+        String digestName = switch (hashType) {
+            case Sha1, Sha1WithSalt -> SHA1_DIGEST_NAME;
+            case Sha256, Sha256WithSalt -> SHA256_DIGEST_NAME;
+            case Sha512, Sha512WithSalt -> SHA512_DIGEST_NAME;
+            default -> throw new IllegalArgumentException("Bad SHA-Based algorithm");
+        };
 
         if ((!hashType.isSaltBased() && saltLength > 0) || (hashType.isSaltBased() && saltLength <= 0)) {
             throw new IllegalArgumentException("Bad salt length");
@@ -90,6 +83,84 @@ public final class SecurityHelper {
 
     private static String encodeBase64(byte[] bytes) {
         return BASE64_ENCODER.encodeToString(bytes);
+    }
+
+    public static boolean validateUserPassword(String userName, String plainPassword, String passwordHash) {
+        int hashTypeCode = Integer.parseInt(passwordHash.substring(0, 2));
+        PasswordHashTypeEnum passwordHashType = PasswordHashTypeEnum.getByHashTypeCode(hashTypeCode);
+
+        if (passwordHashType.isShaBased()) {
+            String basePassword = String.format(PASSWORD_FORMAT, userName, plainPassword);
+            return validateShaBasedPassword(basePassword, passwordHash.substring(2), passwordHashType);
+        } else {
+            throw new IllegalArgumentException("Bad password hash is provided.");
+        }
+    }
+
+    public static boolean validateShaBasedPassword(String plainPassword, String passwordHash, PasswordHashTypeEnum hashType) {
+        if (!hashType.isShaBased()) {
+            throw new IllegalArgumentException("Non SHA-Based algorithm");
+        }
+
+        byte[] storedBytes = BASE64_DECODER.decode(passwordHash);
+
+        int hashLength;
+        int saltLength;
+        String digestName;
+
+        int storedLength = storedBytes.length;
+
+        switch (hashType) {
+            case Sha1:
+            case Sha1WithSalt:
+                hashLength = SHA1_LENGTH;
+                digestName = SHA1_DIGEST_NAME;
+                break;
+            case Sha256:
+            case Sha256WithSalt:
+                hashLength = SHA256_LENGTH;
+                digestName = SHA256_DIGEST_NAME;
+                break;
+            case Sha512:
+            case Sha512WithSalt:
+                hashLength = SHA512_LENGTH;
+                digestName = SHA512_DIGEST_NAME;
+                break;
+            default:
+                return false;
+        }
+
+        saltLength = storedLength - hashLength;
+
+        if (!hashType.isSaltBased() && saltLength > 0) {
+            return false;
+        }
+
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance(digestName);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        byte[] effectivePlainPasswordBytes;
+        byte[] plainPasswordBytes = plainPassword.getBytes(StandardCharsets.UTF_8);
+
+        if (hashType.isSaltBased()) {
+            byte[] saltBytes = Arrays.copyOfRange(storedBytes, 0, saltLength);
+
+            effectivePlainPasswordBytes = Arrays.copyOf(saltBytes, saltLength + plainPasswordBytes.length);
+            System.arraycopy(plainPasswordBytes, 0, effectivePlainPasswordBytes, saltLength, plainPasswordBytes.length);
+
+            digest.update(saltBytes);
+        } else {
+            effectivePlainPasswordBytes = plainPasswordBytes;
+        }
+
+        byte[] generatedHashBytes = digest.digest(effectivePlainPasswordBytes);
+        byte[] passwordHashBytes = Arrays.copyOfRange(storedBytes, saltLength, storedLength);
+
+        return Arrays.equals(generatedHashBytes, passwordHashBytes);
     }
 
     @Getter

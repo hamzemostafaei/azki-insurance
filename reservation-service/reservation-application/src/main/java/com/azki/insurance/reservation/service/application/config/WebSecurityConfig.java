@@ -30,27 +30,12 @@ public class WebSecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/security/user").permitAll()
+                        .requestMatchers("/api/security/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults())
                 .build();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        List<UserDetails> users = List.of(
-                User.withUsername("admin").password(passwordEncoder().encode("password")).roles("ADMIN").build(),
-                User.withUsername("user1").password(passwordEncoder().encode("123")).roles("USERS").build(),
-                User.withUsername("user2").password(passwordEncoder().encode("456")).roles("USERS").build(),
-                User.withUsername("user3").password(passwordEncoder().encode("789")).roles("USERS").build()
-        );
-        return new InMemoryUserDetailsManager(users);
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
