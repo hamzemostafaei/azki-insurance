@@ -1,14 +1,15 @@
 package com.azki.insurance.reservation.service.application.controller.api;
 
 import com.azki.insurance.domain.api.command.CommandResult;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.domain.api.input.CommandHandler;
 import com.azki.insurance.domain.api.input.QueryHandler;
 import com.azki.insurance.domain.api.query.PaginatedQueryResult;
 import com.azki.insurance.reservation.service.application.api.data.reservation.*;
-import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotsCommand;
+import com.azki.insurance.reservation.service.domain.api.command.ReserveNearestAvailableSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
+import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotsCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
-import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.query.SearchReservations;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ReservationController {
     private final CommandHandler<ReserveSlotsCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
     private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
     private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
+    private final CommandHandler<ReserveNearestAvailableSlotCommand, CommandResult<AvailableSlotsDTO>> reserveNearestSlotHandler;
 
     @PostMapping
     public ResponseEntity<CreateReservationEdgeResponseDTO> reserve(@Valid @RequestBody CreateReservationEdgeRequestDTO edgeRequest) {
@@ -70,7 +72,7 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<GetReservationsEdgeResponseDTO> getReservations(@RequestBody GetReservationsEdgeRequestDTO edgeRequest) {
+    public ResponseEntity<GetReservationsEdgeResponseDTO> getReservations(@Valid @RequestBody GetReservationsEdgeRequestDTO edgeRequest) {
         GetReservationsEdgeResponseDTO response = new GetReservationsEdgeResponseDTO();
 
         SearchReservations searchRequest = new SearchReservations();
@@ -93,6 +95,28 @@ public class ReservationController {
         response.setRecordCount(searchResult.getRecordCount());
         response.setPageSize(searchResult.getPageSize());
         response.setOffset(searchResult.getOffset());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reserveNearest")
+    public ResponseEntity<ReserveNearestAvailableSlotEdgeResponseDTO> reserveNearestAvailableSlot(@Valid @RequestBody ReserveNearestAvailableSlotEdgeRequestDTO edgeRequest) {
+        ReserveNearestAvailableSlotEdgeResponseDTO response = new ReserveNearestAvailableSlotEdgeResponseDTO();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReserveNearestAvailableSlotCommand command = new ReserveNearestAvailableSlotCommand();
+
+        if (principal instanceof UserDTO user) {
+            command.setUserName(user.getUsername());
+        }
+        command.setStartTime(edgeRequest.getStartTime());
+
+        CommandResult<AvailableSlotsDTO> commandResult = reserveNearestSlotHandler.handle(command);
+        AvailableSlotsDTO reservedSlot = commandResult.getData();
+
+        response.setId(reservedSlot.getId());
+        response.setStartTime(reservedSlot.getStartTime());
+        response.setEndTime(reservedSlot.getEndTime());
 
         return ResponseEntity.ok(response);
     }

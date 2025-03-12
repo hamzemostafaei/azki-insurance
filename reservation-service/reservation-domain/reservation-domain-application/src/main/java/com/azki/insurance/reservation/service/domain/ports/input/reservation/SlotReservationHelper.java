@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -99,7 +100,7 @@ public class SlotReservationHelper {
         return availableSlots;
     }
 
-    public void reserveSlot(UserDTO user, AvailableSlotsDTO availableSlot) {
+    public AvailableSlotsDTO reserveSlot(UserDTO user, AvailableSlotsDTO availableSlot) {
         long id = SnowFlakeUniqueIDGenerator.nextId(commonConfigData.nodeId());
 
         ReservedSlotsDTO reservedSlot = ReservedSlotsDTO.builder()
@@ -111,7 +112,7 @@ public class SlotReservationHelper {
         reservedSlotsRepository.save(reservedSlot);
 
         availableSlot.setIsReserved(true);
-        availableSlotsRepository.save(availableSlot);
+        return availableSlotsRepository.save(availableSlot);
     }
 
     public void reserveSlots(UserDTO user, List<AvailableSlotsDTO> availableSlots) {
@@ -130,5 +131,21 @@ public class SlotReservationHelper {
 
         reservedSlotsRepository.saveAll(reservedSlots);
         availableSlotsRepository.saveAll(availableSlots);
+    }
+
+    public AvailableSlotsDTO getNearestAvailableSlot(Date startTime) {
+
+        AvailableSlotsDTO nearestAvailableSlot = availableSlotsRepository.findNearestAvailableSlot(startTime);
+
+        if (nearestAvailableSlot == null) {
+            throw new ReservationDomainException(List.of(new ErrorDTO(
+                    ErrorCodeEnum.DATA_NOT_FOUND,
+                    "No available slots exist at this time.",
+                    "NearestAvailableSlot")
+            ));
+        }
+
+        return nearestAvailableSlot;
+
     }
 }
