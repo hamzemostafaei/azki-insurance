@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class BasePaginationEdgeRequestDTO extends BaseEdgeRequestDTO {
+public abstract class BasePaginatedEdgeRequestDTO extends BaseEdgeRequestDTO {
 
     @JsonProperty("pageSize")
     private Integer pageSize;

@@ -1,6 +1,6 @@
-package com.azki.insurance.reservation.service.domain.api.query;
+package com.azki.insurance.reservation.service.domain.api.dto.search;
 
-import com.azki.insurance.domain.api.dto.BaseSearchCriteria;
+import com.azki.insurance.domain.api.dto.query.BaseSearchCriteria;
 import com.azki.insurance.domain.api.dto.query.condition.Condition;
 import com.azki.insurance.domain.api.dto.query.condition.ConditionTypeEnum;
 import lombok.AllArgsConstructor;

@@ -28,7 +28,7 @@
     </logger>
 
     <logger name="org.hibernate.orm.jdbc.extract" additivity="false">
-        <level value="trace"/>
+        <level value="info"/>
         <appender-ref ref="STDOUT"/>
     </logger>
 

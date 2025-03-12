@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class BasePaginationEdgeResponseDTO extends BaseEdgeResponseDTO {
+public abstract class BasePaginatedEdgeResponseDTO extends BaseEdgeResponseDTO {
 
     @JsonProperty("hasNext")
     private Boolean hasNext;

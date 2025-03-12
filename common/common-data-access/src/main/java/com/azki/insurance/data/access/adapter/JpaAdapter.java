@@ -3,7 +3,9 @@ package com.azki.insurance.data.access.adapter;
 import com.azki.insurance.data.access.entity.BaseJpaEntity;
 import com.azki.insurance.domain.api.dto.BaseVersionedDTO;
 import com.azki.insurance.domain.api.dto.query.SearchCriteria;
+import com.azki.insurance.domain.core.exception.DomainException;
 import com.azki.insurance.domain.output.repository.Repository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
@@ -16,9 +18,13 @@ public interface JpaAdapter<D extends BaseVersionedDTO,
                             R extends JpaRepository<E, I>>
         extends Repository<D, I,C> {
 
+    public List<String> getFieldNames();
+
     D save(D dto);
 
     D findById(I id);
+
+    public Page<D> search(C criteria) throws DomainException;
 
     List<D> listSearch(C criteria);
 

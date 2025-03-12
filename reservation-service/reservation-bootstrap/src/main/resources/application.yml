@@ -35,3 +35,5 @@ com:
       logging:
         non-logged-paths:
         ignored-headers:
+      search:
+        page-size: 10

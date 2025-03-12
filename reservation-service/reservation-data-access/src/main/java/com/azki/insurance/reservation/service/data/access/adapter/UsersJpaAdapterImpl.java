@@ -4,7 +4,7 @@ import com.azki.insurance.data.access.adapter.impl.BaseJpaAdapterImpl;
 import com.azki.insurance.reservation.service.data.access.entity.UserEntity;
 import com.azki.insurance.reservation.service.data.access.repository.UserJpaRepository;
 import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
-import com.azki.insurance.reservation.service.domain.api.query.UserCriteriaDTO;
+import com.azki.insurance.reservation.service.domain.api.dto.search.UserCriteriaDTO;
 import com.azki.insurance.reservation.service.domain.ports.output.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
