@@ -19,5 +19,5 @@ public class ReserveSlotsCommand extends Command {
 
     @NotEmpty(message = "At least one slot ID is required.")
     @Size(min = 1, max = 10, message = "The number of slot IDs must be between 1 and 10.")
-    private List<Integer> slotIds;
+    private List<Long> slotIds;
 }

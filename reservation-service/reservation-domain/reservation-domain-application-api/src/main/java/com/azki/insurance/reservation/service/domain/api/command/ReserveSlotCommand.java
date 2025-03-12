@@ -1,7 +1,7 @@
 package com.azki.insurance.reservation.service.domain.api.command;
 
 import com.azki.insurance.domain.api.command.Command;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Data
@@ -11,7 +11,9 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class ReserveSlotCommand extends Command {
 
-    @Nonnull
+    @NotEmpty
     private String userName;
-    private Integer slotId;
+
+    @NotEmpty
+    private Long slotId;
 }

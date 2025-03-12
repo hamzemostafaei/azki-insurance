@@ -8,6 +8,7 @@ import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
 import com.azki.insurance.reservation.service.domain.api.dto.ReservedSlotsDTO;
+import com.azki.insurance.reservation.service.domain.api.dto.search.AvailableSlotsCriteriaDTO;
 import com.azki.insurance.reservation.service.domain.api.dto.search.UserCriteriaDTO;
 import com.azki.insurance.reservation.service.domain.api.exception.ReservationDomainException;
 import com.azki.insurance.reservation.service.domain.ports.output.AvailableSlotsRepository;
@@ -68,7 +69,26 @@ public class SlotReservationHelper {
         return availableSlot;
     }
 
-    public List<AvailableSlotsDTO> validateAndGetAvailableSlots(List<Integer> slotIds) {
+    public AvailableSlotsDTO validateAndGetReservedSlot(Long slotId) {
+
+        AvailableSlotsCriteriaDTO criteria = new AvailableSlotsCriteriaDTO();
+        criteria.setSlotIdEquals(slotId);
+        criteria.setIsReserved(true);
+
+        AvailableSlotsDTO reservedSlot = availableSlotsRepository.getSingleResult(criteria);
+
+        if (reservedSlot == null) {
+            throw new ReservationDomainException(List.of(new ErrorDTO(
+                    ErrorCodeEnum.DATA_NOT_FOUND,
+                    String.format("Slot with id [%s] not found.", slotId),
+                    "ReservedSlot"
+            )));
+        }
+
+        return reservedSlot;
+    }
+
+    public List<AvailableSlotsDTO> validateAndGetAvailableSlots(List<Long> slotIds) {
 
         List<AvailableSlotsDTO> availableSlots = availableSlotsRepository.findAllById(slotIds);
 

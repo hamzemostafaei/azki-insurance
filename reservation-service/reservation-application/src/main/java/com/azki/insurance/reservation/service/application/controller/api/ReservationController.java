@@ -6,6 +6,7 @@ import com.azki.insurance.domain.api.input.CommandHandler;
 import com.azki.insurance.domain.api.input.QueryHandler;
 import com.azki.insurance.domain.api.query.PaginatedQueryResult;
 import com.azki.insurance.reservation.service.application.api.data.reservation.*;
+import com.azki.insurance.reservation.service.domain.api.command.DeleteReservedSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveNearestAvailableSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotsCommand;
@@ -30,6 +31,7 @@ public class ReservationController {
     private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
     private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
     private final CommandHandler<ReserveNearestAvailableSlotCommand, CommandResult<AvailableSlotsDTO>> reserveNearestSlotHandler;
+    private final CommandHandler<DeleteReservedSlotCommand, CommandResult<Void>> deleteReservedSlotHandler;
 
     @PostMapping
     public ResponseEntity<CreateReservationEdgeResponseDTO> reserve(@Valid @RequestBody CreateReservationEdgeRequestDTO edgeRequest) {
@@ -49,13 +51,22 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteReservationEdgeResponseDTO> delete(@PathVariable("id") Integer reservationId) {
+    public ResponseEntity<DeleteReservationEdgeResponseDTO> delete(@PathVariable("id") Long reservationId) {
         DeleteReservationEdgeResponseDTO response = new DeleteReservationEdgeResponseDTO();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        DeleteReservedSlotCommand command = DeleteReservedSlotCommand.builder().reservedSlotId(reservationId).build();
+
+        if (principal instanceof UserDTO user) {
+            command.setUsername(user.getUsername());
+        }
+        deleteReservedSlotHandler.handle(command);
+
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ReserveSlotEdgeResponseDTO> reserveById(@PathVariable("id") Integer slotId) {
+    public ResponseEntity<ReserveSlotEdgeResponseDTO> reserveById(@PathVariable("id") Long slotId) {
         ReserveSlotEdgeResponseDTO response = new ReserveSlotEdgeResponseDTO();
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

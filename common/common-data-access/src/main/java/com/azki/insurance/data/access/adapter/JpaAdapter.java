@@ -37,4 +37,6 @@ public interface JpaAdapter<D extends BaseVersionedDTO,
     boolean exists(C criteria);
 
     D getSingleResult(C criteria);
+
+    public void deleteById(I id);
 }

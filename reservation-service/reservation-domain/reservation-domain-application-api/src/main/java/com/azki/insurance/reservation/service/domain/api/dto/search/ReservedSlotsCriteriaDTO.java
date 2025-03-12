@@ -16,10 +16,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = false)
 public class ReservedSlotsCriteriaDTO extends BaseSearchCriteria {
 
-    @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "reservedSlotsId.userId")
-    private Integer userIdEquals;
+    @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "userId")
+    private Long userIdEquals;
 
-    @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "reservedSlotsId.availableSlotId")
-    private String slotIdEquals;
+    @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "availableSlotId")
+    private Long slotIdEquals;
 
 }

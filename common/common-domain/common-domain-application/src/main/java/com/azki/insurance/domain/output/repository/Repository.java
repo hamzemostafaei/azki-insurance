@@ -28,4 +28,6 @@ public interface Repository<D extends BaseVersionedDTO, I extends Serializable, 
 
     Page<D> search(C criteria) throws DomainException;
 
+    public void deleteById(I id);
+
 }

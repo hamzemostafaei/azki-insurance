@@ -19,7 +19,7 @@ import java.util.Date;
 public class AvailableSlotsCriteriaDTO extends BaseSearchCriteria {
 
     @Condition(type = ConditionTypeEnum.EQUAL, fieldName = "id")
-    private Integer reservationIdEquals;
+    private Long slotIdEquals;
 
     @Condition(type = ConditionTypeEnum.GREATER_THAN_OR_EQUAL_TO, fieldName = "startTime")
     private Date startTimeGreaterThanOrEqual;

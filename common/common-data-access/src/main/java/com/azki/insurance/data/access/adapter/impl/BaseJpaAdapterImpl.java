@@ -319,4 +319,8 @@ public abstract class BaseJpaAdapterImpl<D  extends BaseVersionedDTO,
         return entities;
     }
 
+    @Override
+    public void deleteById(I id) {
+        repository.deleteById(id);
+    }
 }

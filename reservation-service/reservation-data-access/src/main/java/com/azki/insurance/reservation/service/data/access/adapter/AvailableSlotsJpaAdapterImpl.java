@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class AvailableSlotsJpaAdapterImpl extends BaseJpaAdapterImpl<AvailableSlotsDTO,
-                                                                     Integer,
+                                                                     Long,
                                                                      AvailableSlotsEntity,
                                                                      AvailableSlotsCriteriaDTO,
                                                                      AvailableSlotsJpaRepository>

@@ -6,6 +6,6 @@ import com.azki.insurance.reservation.service.domain.api.dto.search.AvailableSlo
 
 import java.util.Date;
 
-public interface AvailableSlotsRepository extends Repository<AvailableSlotsDTO, Integer, AvailableSlotsCriteriaDTO> {
+public interface AvailableSlotsRepository extends Repository<AvailableSlotsDTO, Long, AvailableSlotsCriteriaDTO> {
     AvailableSlotsDTO findNearestAvailableSlot(Date startTime);
 }
