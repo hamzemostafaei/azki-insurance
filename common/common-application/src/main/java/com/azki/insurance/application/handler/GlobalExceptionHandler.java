@@ -3,17 +3,18 @@ package com.azki.insurance.application.handler;
 import com.azki.insurance.api.data.BaseEdgeResponseDTO;
 import com.azki.insurance.common.core.data.ErrorCodeEnum;
 import com.azki.insurance.common.core.data.ErrorDTO;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Slf4j
 @ControllerAdvice
@@ -36,32 +37,58 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseEdgeResponseDTO handleException(ValidationException validationException) {
-        ErrorDTO errorDTO;
+        BaseEdgeResponseDTO response = new BaseEdgeResponseDTO();
         if (validationException instanceof ConstraintViolationException constraintViolationException) {
-            String violations = extractViolationsFromException(constraintViolationException);
+
+            List<ErrorDTO> errors = constraintViolationException.getConstraintViolations().stream()
+                    .map(violation -> {
+                        String fieldName = getFinalFieldName(violation.getPropertyPath());
+                        String errorMessage = violation.getMessage();
+                        return new ErrorDTO(ErrorCodeEnum.DATA_FORMAT_MISMATCH, String.format("%s %s", fieldName, errorMessage), fieldName);
+                    })
+                    .toList();
+
             if (log.isErrorEnabled()) {
-                log.error(violations, validationException);
+                log.error("Violated fields: {}", errors);
             }
-            errorDTO = new ErrorDTO(ErrorCodeEnum.INCONSISTENT_DATA, violations, "ConstraintViolationException");
+            response.setErrors(errors);
         } else {
             String exceptionMessage = validationException.getMessage();
             if (log.isErrorEnabled()) {
                 log.error(exceptionMessage, validationException);
             }
-            errorDTO = new ErrorDTO(ErrorCodeEnum.INCONSISTENT_DATA, exceptionMessage, "ConstraintViolationException");
+            response.addError(new ErrorDTO(ErrorCodeEnum.INCONSISTENT_DATA, exceptionMessage, "ConstraintViolationException"));
         }
-
-        BaseEdgeResponseDTO response = new BaseEdgeResponseDTO();
-        response.addError(errorDTO);
 
         return response;
     }
 
-    private String extractViolationsFromException(ConstraintViolationException validationException) {
-        return validationException.getConstraintViolations()
+    @ResponseBody
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseEdgeResponseDTO handleValidationException(MethodArgumentNotValidException exception) {
+
+        List<ErrorDTO> errors = exception.getBindingResult().getFieldErrors()
                 .stream()
-                .map(ConstraintViolation::getMessage)
-                .collect(Collectors.joining("--"));
+                .map(fieldError -> new ErrorDTO(ErrorCodeEnum.DATA_FORMAT_MISMATCH, fieldError.getDefaultMessage(), fieldError.getField()))
+                .toList();
+
+        if (log.isErrorEnabled()) {
+            log.error("Validation failed: {}", errors);
+        }
+
+        BaseEdgeResponseDTO response = new BaseEdgeResponseDTO();
+        response.setErrors(errors);
+
+        return response;
+    }
+
+    private String getFinalFieldName(Path propertyPath) {
+        String fieldName = null;
+        for (Path.Node node : propertyPath) {
+            fieldName = node.getName();
+        }
+        return fieldName;
     }
 
 }

@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Slf4j
 @Service
+@Validated
 @Transactional(propagation = Propagation.REQUIRED)
 public abstract class BaseCommandHandler<C extends Command, R extends CommandResult<?>> implements CommandHandler<C, R> {
 

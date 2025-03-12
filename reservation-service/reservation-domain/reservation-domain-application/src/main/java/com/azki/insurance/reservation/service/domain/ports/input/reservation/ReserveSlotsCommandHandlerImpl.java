@@ -8,13 +8,11 @@ import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@Validated
 @RequiredArgsConstructor
 public class ReserveSlotsCommandHandlerImpl extends BaseCommandHandler<ReserveSlotsCommand, CommandResult<AvailableSlotsDTO>> {
 

@@ -10,6 +10,7 @@ import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotComm
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
 import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.query.SearchReservations;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ReservationController {
     private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
 
     @PostMapping
-    public ResponseEntity<CreateReservationEdgeResponseDTO> reserve(@RequestBody CreateReservationEdgeRequestDTO edgeRequest) {
+    public ResponseEntity<CreateReservationEdgeResponseDTO> reserve(@Valid @RequestBody CreateReservationEdgeRequestDTO edgeRequest) {
         CreateReservationEdgeResponseDTO response = new CreateReservationEdgeResponseDTO();
 
         ReserveSlotsCommand reservationCommand = new ReserveSlotsCommand();
@@ -40,7 +41,7 @@ public class ReservationController {
         }
         reservationCommand.setSlotIds(edgeRequest.getSlotIds());
 
-        CommandResult<AvailableSlotsDTO> result = createReservationHandler.handle(reservationCommand);
+        createReservationHandler.handle(reservationCommand);
 
         return ResponseEntity.ok(response);
     }
