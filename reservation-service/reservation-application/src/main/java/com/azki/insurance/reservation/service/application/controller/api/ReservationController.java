@@ -29,7 +29,7 @@ public class ReservationController {
 
     private final CommandHandler<ReserveSlotsCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
     private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
-    private final QueryHandler<GetAvailableSlotsQuery, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
+    private final QueryHandler<GetAvailableSlotsQuery, PaginatedQueryResult<AvailableSlotsDTO>> getAvailableSlotsQueryHandler;
     private final CommandHandler<ReserveNearestAvailableSlotCommand, CommandResult<AvailableSlotsDTO>> reserveNearestSlotHandler;
     private final CommandHandler<DeleteReservedSlotCommand, CommandResult<Void>> deleteReservedSlotHandler;
 
@@ -92,7 +92,7 @@ public class ReservationController {
         searchRequest.setPageSize(edgeRequest.getPageSize());
         searchRequest.setOffset(edgeRequest.getOffset());
 
-        PaginatedQueryResult<AvailableSlotsDTO> searchResult = searchReservationHandler.handle(searchRequest);
+        PaginatedQueryResult<AvailableSlotsDTO> searchResult = getAvailableSlotsQueryHandler.handle(searchRequest);
 
         List<ReservationEdgeDTO> reservations = searchResult.getData().stream().map(slot -> ReservationEdgeDTO.builder()
                         .id(slot.getId())

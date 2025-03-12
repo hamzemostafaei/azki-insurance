@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.PathMatcher;
@@ -39,10 +38,8 @@ public class LoggingExchangeBodyExtractionEventHandler implements IExchangeBodyE
     private static void setEffectiveUserNameToContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails user) {
-                LoggingUtil.setUserNameToContext(user.getUsername());
-            }
+            Object credentials = authentication.getCredentials();
+            LoggingUtil.setUserNameToContext(String.valueOf(credentials));
         }
     }
 

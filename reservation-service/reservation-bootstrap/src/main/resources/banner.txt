@@ -1,0 +1,21 @@
+                                                                                  
+                                                                                  
+                                                     AAA               ZZZZZZZZZZZZZZZZZZZKKKKKKKKK    KKKKKKKIIIIIIIIII
+                                                    A:::A              Z:::::::::::::::::ZK:::::::K    K:::::KI::::::::I
+                                                   A:::::A             Z:::::::::::::::::ZK:::::::K    K:::::KI::::::::I
+                                                  A:::::::A            Z:::ZZZZZZZZ:::::Z K:::::::K   K::::::KII::::::II
+                                                 A:::::::::A           ZZZZZ     Z:::::Z  KK::::::K  K:::::KKK  I::::I
+                                                A:::::A:::::A                  Z:::::Z      K:::::K K:::::K     I::::I
+                                               A:::::A A:::::A                Z:::::Z       K::::::K:::::K      I::::I
+                                              A:::::A   A:::::A              Z:::::Z        K:::::::::::K       I::::I
+                                             A:::::A     A:::::A            Z:::::Z         K:::::::::::K       I::::I
+                                            A:::::AAAAAAAAA:::::A          Z:::::Z          K::::::K:::::K      I::::I
+                                           A:::::::::::::::::::::A        Z:::::Z           K:::::K K:::::K     I::::I
+                                          A:::::AAAAAAAAAAAAA:::::A    ZZZ:::::Z     ZZZZZKK::::::K  K:::::KKK  I::::I
+                                         A:::::A             A:::::A   Z::::::ZZZZZZZZ:::ZK:::::::K   K::::::KII::::::II
+                                        A:::::A               A:::::A  Z:::::::::::::::::ZK:::::::K    K:::::KI::::::::I
+                                       A:::::A                 A:::::A Z:::::::::::::::::ZK:::::::K    K:::::KI::::::::I
+                                      AAAAAAA                   AAAAAAAZZZZZZZZZZZZZZZZZZZKKKKKKKKK    KKKKKKKIIIIIIIIII
+
+${application.title} ${application.version}
+Powered by Spring Boot ${spring-boot.version}
