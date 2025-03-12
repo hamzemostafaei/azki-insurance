@@ -7,13 +7,18 @@ import com.azki.insurance.domain.core.exception.DomainException;
 import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 public interface Repository<D extends BaseVersionedDTO, I extends Serializable, C extends SearchCriteria> {
 
     D save(D dto);
 
+    Iterable<D> saveAll(Iterable<D> dtoList);
+
     D findById(I id);
+
+    List<D> findAllById(Collection<I> idList);
 
     List<D> listSearch(C criteria);
 
@@ -21,6 +26,6 @@ public interface Repository<D extends BaseVersionedDTO, I extends Serializable, 
 
     D getSingleResult(C criteria);
 
-    public Page<D> search(C criteria) throws DomainException;
+    Page<D> search(C criteria) throws DomainException;
 
 }

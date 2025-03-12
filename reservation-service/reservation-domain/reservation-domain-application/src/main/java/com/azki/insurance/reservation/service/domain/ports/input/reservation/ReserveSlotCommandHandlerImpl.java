@@ -28,70 +28,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReserveSlotCommandHandlerImpl extends BaseCommandHandler<ReserveSlotCommand, CommandResult<Void>> {
 
-    private final AvailableSlotsRepository availableSlotsRepository;
-    private final UserRepository userRepository;
-    private final ReservedSlotsRepository reservedSlotsRepository;
-    private final CommonConfigData commonConfigData;
+
+    private final SlotReservationHelper slotReservationHelper;
 
     @Override
     protected CommandResult<Void> execute(ReserveSlotCommand command) {
 
-        UserDTO user = validateAndGetUser(command);
-        AvailableSlotsDTO slot = validateAndGetAvailableSlot(command);
-
-        reserveSlot(user, slot);
+        UserDTO user = slotReservationHelper.validateAndGetUser(command.getUserName());
+        AvailableSlotsDTO slot = slotReservationHelper.validateAndGetAvailableSlot(command);
+        slotReservationHelper.reserveSlot(user, slot);
 
         return CommandResult.success();
     }
 
-    private void reserveSlot(UserDTO user, AvailableSlotsDTO slot) {
-        long id = SnowFlakeUniqueIDGenerator.nextId(commonConfigData.nodeId());
-
-        ReservedSlotsDTO reservedSlot = ReservedSlotsDTO.builder()
-                .id(id)
-                .userId(user.getUserId())
-                .availableSlotId(slot.getId())
-                .build();
-
-        reservedSlotsRepository.save(reservedSlot);
-
-        slot.setIsReserved(true);
-        availableSlotsRepository.save(slot);
-    }
-
-    private AvailableSlotsDTO validateAndGetAvailableSlot(ReserveSlotCommand command) {
-        AvailableSlotsDTO availableSlot = availableSlotsRepository.findById(command.getSlotId());
-        if (availableSlot == null) {
-            throw new ReservationDomainException(List.of(new ErrorDTO(
-                    ErrorCodeEnum.DATA_NOT_FOUND,
-                    String.format("Slot with id [%s] not found.", command.getSlotId()),
-                    "Slot"
-            )));
-        }
-
-        if (availableSlot.getIsReserved()) {
-            throw new ReservationDomainException(List.of(new ErrorDTO(
-                    ErrorCodeEnum.INCONSISTENT_DATA,
-                    String.format("Slot with id [%s] already reserved.", command.getSlotId()),
-                    "ReservedSlot"
-            )));
-        }
-        return availableSlot;
-    }
-
-    private UserDTO validateAndGetUser(ReserveSlotCommand command) {
-        UserCriteriaDTO userNameCriteria = new UserCriteriaDTO();
-        userNameCriteria.setUsernameEquals(command.getUserName());
-
-        UserDTO user = userRepository.getSingleResult(userNameCriteria);
-        if (user == null) {
-            throw new ReservationDomainException(List.of(new ErrorDTO(
-                    ErrorCodeEnum.DATA_NOT_FOUND,
-                    String.format("User with username [%s] not found.", command.getUserName()),
-                    "User"
-            )));
-        }
-
-        return user;
-    }
 }

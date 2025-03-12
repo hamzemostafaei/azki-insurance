@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 public interface JpaAdapter<D extends BaseVersionedDTO,
@@ -21,14 +22,17 @@ public interface JpaAdapter<D extends BaseVersionedDTO,
     public List<String> getFieldNames();
 
     D save(D dto);
+    Iterable<D> saveAll(Iterable<D> dtoList);
 
     D findById(I id);
 
-    public Page<D> search(C criteria) throws DomainException;
+    List<D> findAllById(Collection<I> idList);
+
+    Page<D> search(C criteria) throws DomainException;
 
     List<D> listSearch(C criteria);
 
-    public boolean existsById(I id);
+    boolean existsById(I id);
 
     boolean exists(C criteria);
 

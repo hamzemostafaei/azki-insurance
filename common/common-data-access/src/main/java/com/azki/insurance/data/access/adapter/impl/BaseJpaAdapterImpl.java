@@ -32,10 +32,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -81,11 +78,26 @@ public abstract class BaseJpaAdapterImpl<D  extends BaseVersionedDTO,
     }
 
     @Override
+    public Iterable<D> saveAll(Iterable<D> dtoList) {
+        List<E> entities = dtoCollectionToEntity(dtoList);
+        Iterable<E> savedEntities = repository.saveAll(entities);
+        return entityCollectionToDTO(savedEntities);
+    }
+
+    @Override
     public D findById(I id) {
         Optional<E> result = repository.findById(id);
         return result
                 .map(this::entityToDTO)
                 .orElse(null);
+    }
+
+    @Override
+    public List<D> findAllById(Collection<I> idList) {
+
+        List<E> fetchedEntities = repository.findAllById(idList);
+        return fetchedEntities.stream().map(this::entityToDTO).toList();
+
     }
 
     @Override
@@ -292,6 +304,19 @@ public abstract class BaseJpaAdapterImpl<D  extends BaseVersionedDTO,
             return sortItems;
         }
         return Collections.emptyList();
+    }
+
+    protected List<E> dtoCollectionToEntity(Iterable<D> dtoList) {
+        if (dtoList == null) {
+            return null;
+        }
+
+        List<E> entities = new ArrayList<>();
+        for (D dto : dtoList) {
+            entities.add(dtoToEntity(dto));
+        }
+
+        return entities;
     }
 
 }

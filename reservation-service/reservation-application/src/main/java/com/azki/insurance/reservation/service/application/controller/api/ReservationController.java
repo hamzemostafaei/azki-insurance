@@ -5,7 +5,7 @@ import com.azki.insurance.domain.api.input.CommandHandler;
 import com.azki.insurance.domain.api.input.QueryHandler;
 import com.azki.insurance.domain.api.query.PaginatedQueryResult;
 import com.azki.insurance.reservation.service.application.api.data.reservation.*;
-import com.azki.insurance.reservation.service.domain.api.command.CreateReservationCommand;
+import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotsCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
 import com.azki.insurance.domain.api.dto.UserDTO;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/reservations")
 public class ReservationController {
 
-    private final CommandHandler<CreateReservationCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
+    private final CommandHandler<ReserveSlotsCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
     private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
     private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
 
@@ -32,11 +32,13 @@ public class ReservationController {
     public ResponseEntity<CreateReservationEdgeResponseDTO> reserve(@RequestBody CreateReservationEdgeRequestDTO edgeRequest) {
         CreateReservationEdgeResponseDTO response = new CreateReservationEdgeResponseDTO();
 
-        CreateReservationCommand reservationCommand =
-                CreateReservationCommand.builder()
-                        .startTime(edgeRequest.getStartTime())
-                        .endTime(edgeRequest.getEndTime())
-                        .build();
+        ReserveSlotsCommand reservationCommand = new ReserveSlotsCommand();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDTO user) {
+            reservationCommand.setUserName(user.getUsername());
+        }
+        reservationCommand.setSlotIds(edgeRequest.getSlotIds());
 
         CommandResult<AvailableSlotsDTO> result = createReservationHandler.handle(reservationCommand);
 
@@ -50,7 +52,7 @@ public class ReservationController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ReserveSlotEdgeResponseDTO> reserveSlot(@PathVariable("id") Integer slotId) {
+    public ResponseEntity<ReserveSlotEdgeResponseDTO> reserveById(@PathVariable("id") Integer slotId) {
         ReserveSlotEdgeResponseDTO response = new ReserveSlotEdgeResponseDTO();
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
