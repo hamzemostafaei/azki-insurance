@@ -11,7 +11,7 @@ import com.azki.insurance.reservation.service.domain.api.command.ReserveNearestA
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotsCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
-import com.azki.insurance.reservation.service.domain.api.query.SearchReservations;
+import com.azki.insurance.reservation.service.domain.api.query.GetAvailableSlotsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class ReservationController {
 
     private final CommandHandler<ReserveSlotsCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
     private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
-    private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
+    private final QueryHandler<GetAvailableSlotsQuery, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
     private final CommandHandler<ReserveNearestAvailableSlotCommand, CommandResult<AvailableSlotsDTO>> reserveNearestSlotHandler;
     private final CommandHandler<DeleteReservedSlotCommand, CommandResult<Void>> deleteReservedSlotHandler;
 
@@ -82,11 +82,11 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<GetReservationsEdgeResponseDTO> getReservations(@Valid @RequestBody GetReservationsEdgeRequestDTO edgeRequest) {
-        GetReservationsEdgeResponseDTO response = new GetReservationsEdgeResponseDTO();
+    @GetMapping("/available")
+    public ResponseEntity<GetAvailableSlotsEdgeResponseDTO> getAvailableSlots(@Valid @RequestBody GetAvailableSlotsEdgeRequestDTO edgeRequest) {
+        GetAvailableSlotsEdgeResponseDTO response = new GetAvailableSlotsEdgeResponseDTO();
 
-        SearchReservations searchRequest = new SearchReservations();
+        GetAvailableSlotsQuery searchRequest = new GetAvailableSlotsQuery();
         searchRequest.setStartTime(edgeRequest.getStartTime());
         searchRequest.setEndTime(edgeRequest.getEndTime());
         searchRequest.setPageSize(edgeRequest.getPageSize());

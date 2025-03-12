@@ -8,9 +8,8 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SearchReservations extends PaginatedQuery {
+public class GetAvailableSlotsQuery extends PaginatedQuery {
 
     private Date startTime;
     private Date endTime;
-    private Boolean isReserved;
 }

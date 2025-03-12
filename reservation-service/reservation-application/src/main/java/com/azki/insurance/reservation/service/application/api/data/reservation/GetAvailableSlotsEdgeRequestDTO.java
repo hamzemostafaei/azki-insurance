@@ -1,6 +1,5 @@
 package com.azki.insurance.reservation.service.application.api.data.reservation;
 
-import com.azki.insurance.api.data.BaseEdgeRequestDTO;
 import com.azki.insurance.api.data.BasePaginatedEdgeRequestDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -10,7 +9,7 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class GetReservationsEdgeRequestDTO extends BasePaginatedEdgeRequestDTO {
+public class GetAvailableSlotsEdgeRequestDTO extends BasePaginatedEdgeRequestDTO {
 
     @JsonProperty("startTime")
     private Date startTime;

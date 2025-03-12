@@ -1,13 +1,12 @@
 package com.azki.insurance.reservation.service.domain.ports.input.security;
 
-import com.azki.insurance.common.app.config.CommonConfigData;
 import com.azki.insurance.common.core.data.ErrorCodeEnum;
 import com.azki.insurance.common.core.data.ErrorDTO;
 import com.azki.insurance.common.utility.SecurityHelper;
 import com.azki.insurance.domain.api.command.CommandResult;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.domain.input.BaseCommandHandler;
 import com.azki.insurance.reservation.service.domain.api.command.CreateUserCommand;
-import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.exception.ReservationDomainException;
 import com.azki.insurance.reservation.service.domain.ports.output.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.List;
 public class CreateUserCommandHandlerImpl extends BaseCommandHandler<CreateUserCommand, CommandResult<UserDTO>> {
 
     private final UserRepository userRepository;
-    private final CommonConfigData configData;
 
     @Override
     protected CommandResult<UserDTO> execute(CreateUserCommand command) {

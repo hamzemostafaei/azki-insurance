@@ -11,6 +11,7 @@ import com.azki.insurance.reservation.service.domain.api.command.LoginCommand;
 import com.azki.insurance.domain.api.dto.UserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,7 @@ public class SecurityController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<CreateUserEdgeResponseDTO> createUser(@RequestBody CreateUserEdgeRequestDTO edgeRequest) {
+    public ResponseEntity<CreateUserEdgeResponseDTO> createUser(@Valid @RequestBody CreateUserEdgeRequestDTO edgeRequest) {
         CreateUserEdgeResponseDTO response = new CreateUserEdgeResponseDTO();
 
         CreateUserCommand command = new CreateUserCommand();
