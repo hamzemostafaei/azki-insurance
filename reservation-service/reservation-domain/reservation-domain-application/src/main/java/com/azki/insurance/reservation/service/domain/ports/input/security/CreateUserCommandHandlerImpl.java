@@ -4,11 +4,10 @@ import com.azki.insurance.common.app.config.CommonConfigData;
 import com.azki.insurance.common.core.data.ErrorCodeEnum;
 import com.azki.insurance.common.core.data.ErrorDTO;
 import com.azki.insurance.common.utility.SecurityHelper;
-import com.azki.insurance.common.utility.SnowFlakeUniqueIDGenerator;
 import com.azki.insurance.domain.api.command.CommandResult;
 import com.azki.insurance.domain.input.BaseCommandHandler;
 import com.azki.insurance.reservation.service.domain.api.command.CreateUserCommand;
-import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.exception.ReservationDomainException;
 import com.azki.insurance.reservation.service.domain.ports.output.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,10 +49,9 @@ public class CreateUserCommandHandlerImpl extends BaseCommandHandler<CreateUserC
     }
 
     private UserDTO createUser(CreateUserCommand command) {
-        long userId = SnowFlakeUniqueIDGenerator.getGenerator(configData.nodeId()).nextId();
 
         return UserDTO.builder()
-                .userId(userId)
+                .userId(userRepository.getNextUserId())
                 .username(command.getUserName())
                 .password(SecurityHelper.generateUserPassword(command.getUserName(), command.getPassword()))
                 .email(command.getEmail())

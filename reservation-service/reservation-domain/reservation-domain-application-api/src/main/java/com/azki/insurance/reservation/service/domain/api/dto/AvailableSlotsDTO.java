@@ -16,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class AvailableSlotsDTO extends BaseVersionedDTO {
 
-    private Integer id;
+    private Long id;
     private Date startTime;
     private Date endTime;
     private Boolean isReserved;

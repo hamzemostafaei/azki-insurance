@@ -14,7 +14,7 @@ import java.util.Date;
 public class ReservationEdgeDTO extends BaseDTO {
 
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("startTime")
     private Date startTime;

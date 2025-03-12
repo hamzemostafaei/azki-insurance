@@ -1,5 +1,6 @@
 package com.azki.insurance.application.handler;
 
+import com.azki.insurance.api.data.BaseEdgeResponseDTO;
 import com.azki.insurance.common.core.data.ErrorCodeEnum;
 import com.azki.insurance.common.core.data.ErrorDTO;
 import jakarta.validation.ConstraintViolation;
@@ -21,17 +22,20 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorDTO handleException(Exception exception) {
+    public BaseEdgeResponseDTO handleException(Exception exception) {
         if (log.isErrorEnabled()) {
             log.error(exception.getMessage(), exception);
         }
-        return new ErrorDTO(ErrorCodeEnum.INTERNAL_SERVICE_ERROR, "InternalServerError");
+        BaseEdgeResponseDTO response = new BaseEdgeResponseDTO();
+        response.addError(new ErrorDTO(ErrorCodeEnum.INTERNAL_SERVICE_ERROR, "InternalServerError"));
+
+        return response;
     }
 
     @ResponseBody
     @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorDTO handleException(ValidationException validationException) {
+    public BaseEdgeResponseDTO handleException(ValidationException validationException) {
         ErrorDTO errorDTO;
         if (validationException instanceof ConstraintViolationException constraintViolationException) {
             String violations = extractViolationsFromException(constraintViolationException);
@@ -46,7 +50,11 @@ public class GlobalExceptionHandler {
             }
             errorDTO = new ErrorDTO(ErrorCodeEnum.INCONSISTENT_DATA, exceptionMessage, "ConstraintViolationException");
         }
-        return errorDTO;
+
+        BaseEdgeResponseDTO response = new BaseEdgeResponseDTO();
+        response.addError(errorDTO);
+
+        return response;
     }
 
     private String extractViolationsFromException(ConstraintViolationException validationException) {

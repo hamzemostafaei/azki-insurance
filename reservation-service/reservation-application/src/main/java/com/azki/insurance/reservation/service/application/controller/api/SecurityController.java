@@ -8,7 +8,7 @@ import com.azki.insurance.reservation.service.application.api.data.security.Crea
 import com.azki.insurance.reservation.service.application.api.data.security.CreateUserEdgeResponseDTO;
 import com.azki.insurance.reservation.service.domain.api.command.CreateUserCommand;
 import com.azki.insurance.reservation.service.domain.api.command.LoginCommand;
-import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class SecurityController {
             response.setMessage("Successfully logged in");
             UserDTO user = commandResult.getData();
             UsernamePasswordAuthenticationToken authenticated =
-                    UsernamePasswordAuthenticationToken.authenticated(user.getUsername(), null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                    UsernamePasswordAuthenticationToken.authenticated(user, user.getUsername(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
             SecurityContext securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(authenticated);
 

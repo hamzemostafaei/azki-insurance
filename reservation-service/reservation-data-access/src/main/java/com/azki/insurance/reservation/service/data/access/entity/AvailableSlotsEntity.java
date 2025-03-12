@@ -22,7 +22,7 @@ public class AvailableSlotsEntity extends BaseJpaEntity {
 
     @Id
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "start_time", nullable = false)
     private Date startTime;

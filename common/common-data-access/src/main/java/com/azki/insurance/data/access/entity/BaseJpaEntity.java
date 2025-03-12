@@ -1,9 +1,12 @@
 package com.azki.insurance.data.access.entity;
 
+import com.azki.insurance.domain.api.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.domain.Persistable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -40,13 +43,25 @@ public abstract class BaseJpaEntity{
 
     @PrePersist
     protected void handlePrePersist() {
-        this.creatorUserId = 1L;
+        this.creatorUserId = getUSerId();
         this.creationDate = new Timestamp(new Date().getTime());
     }
 
     @PreUpdate
     protected void handlePreUpdate() {
-        this.updaterUserId = 1L;
+        this.updaterUserId = getUSerId();
+        this.lastUpdate = new Timestamp(new Date().getTime());
+    }
+
+    //TODO: UserDetails must be used
+    private long getUSerId(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDTO user) {
+            return user.getUserId();
+        }else{
+            //System user
+            return 0L;
+        }
     }
 
 }

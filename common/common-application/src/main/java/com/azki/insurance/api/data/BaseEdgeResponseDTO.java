@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class BaseEdgeResponseDTO extends BaseEdgeRequestDTO {
+public class BaseEdgeResponseDTO extends BaseEdgeRequestDTO {
 
     public BaseEdgeResponseDTO() {
         this.status = ServiceStatusEnum.SUCCESSFUL;

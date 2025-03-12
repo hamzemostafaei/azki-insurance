@@ -12,9 +12,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UserDTO extends BaseVersionedDTO {
+public class ReservedSlotsDTO extends BaseVersionedDTO {
+
+    private Long id;
+    private Long availableSlotId;
     private Long userId;
-    private String username;
-    private String password;
-    private String email;
+
 }

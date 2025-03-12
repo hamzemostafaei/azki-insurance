@@ -25,6 +25,12 @@ public class CommandResult<D> {
                 .build();
     }
 
+    public static <D> CommandResult<D> success() {
+        return CommandResult.<D>builder()
+                .successful(true)
+                .build();
+    }
+
     public static <D> CommandResult<D> failure(List<ErrorDTO> errors) {
         return CommandResult.<D>builder()
                 .successful(false)

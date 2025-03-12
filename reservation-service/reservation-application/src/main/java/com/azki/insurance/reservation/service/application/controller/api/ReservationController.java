@@ -6,11 +6,14 @@ import com.azki.insurance.domain.api.input.QueryHandler;
 import com.azki.insurance.domain.api.query.PaginatedQueryResult;
 import com.azki.insurance.reservation.service.application.api.data.reservation.*;
 import com.azki.insurance.reservation.service.domain.api.command.CreateReservationCommand;
+import com.azki.insurance.reservation.service.domain.api.command.ReserveSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.query.SearchReservations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 public class ReservationController {
 
     private final CommandHandler<CreateReservationCommand, CommandResult<AvailableSlotsDTO>> createReservationHandler;
+    private final CommandHandler<ReserveSlotCommand, CommandResult<Void>> reserveSlotCommandHandler;
     private final QueryHandler<SearchReservations, PaginatedQueryResult<AvailableSlotsDTO>> searchReservationHandler;
 
     @PostMapping
@@ -42,6 +46,23 @@ public class ReservationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteReservationEdgeResponseDTO> delete(@PathVariable("id") Integer reservationId) {
         DeleteReservationEdgeResponseDTO response = new DeleteReservationEdgeResponseDTO();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<ReserveSlotEdgeResponseDTO> reserveSlot(@PathVariable("id") Integer slotId) {
+        ReserveSlotEdgeResponseDTO response = new ReserveSlotEdgeResponseDTO();
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReserveSlotCommand command = new ReserveSlotCommand();
+
+        if (principal instanceof UserDTO user) {
+            command.setUserName(user.getUsername());
+        }
+        command.setSlotId(slotId);
+
+        reserveSlotCommandHandler.handle(command);
+
         return ResponseEntity.ok(response);
     }
 

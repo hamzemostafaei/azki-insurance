@@ -6,7 +6,7 @@ import com.azki.insurance.common.utility.SecurityHelper;
 import com.azki.insurance.domain.api.command.CommandResult;
 import com.azki.insurance.domain.input.BaseCommandHandler;
 import com.azki.insurance.reservation.service.domain.api.command.LoginCommand;
-import com.azki.insurance.reservation.service.domain.api.dto.UserDTO;
+import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.reservation.service.domain.api.exception.ReservationDomainException;
 import com.azki.insurance.reservation.service.domain.api.dto.search.UserCriteriaDTO;
 import com.azki.insurance.reservation.service.domain.ports.output.UserRepository;

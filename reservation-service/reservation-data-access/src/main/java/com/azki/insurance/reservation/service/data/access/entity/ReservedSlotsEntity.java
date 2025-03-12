@@ -1,10 +1,11 @@
 package com.azki.insurance.reservation.service.data.access.entity;
 
 import com.azki.insurance.data.access.entity.BaseJpaEntity;
-import com.azki.insurance.reservation.service.data.access.entity.id.ReservedSlotsEntityId;
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,7 +19,16 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "RESERVED_SLOTS", schema = "AZKI_RESERVATION")
 public class ReservedSlotsEntity extends BaseJpaEntity {
 
-    @EmbeddedId
-    private ReservedSlotsEntityId reservedSlotsId;
+    @Id
+    @Column(name = "ID", nullable = false)
+    private Long id;
+
+    @NotNull
+    @Column(name = "AVAILABLE_SLOT_ID", nullable = false)
+    private Long availableSlotId;
+
+    @NotNull
+    @Column(name = "USER_ID", nullable = false)
+    private Long userId;
 
 }
