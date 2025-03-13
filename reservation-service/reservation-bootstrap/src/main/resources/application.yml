@@ -25,6 +25,29 @@ spring:
   threads:
     virtual:
       enabled: true
+  data:
+    redis:
+      client-name: reservation-service
+      client-type: lettuce
+      connect-timeout: PT5S
+      database: 0
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          enabled: true
+          min-idle: 2
+          max-active: 8
+          max-idle: 4
+          time-between-eviction-runs: PT30M
+      timeout: PT3S
+      ssl:
+        enabled: false
+  cache:
+    redis:
+      key-prefix: 'azki-insurance:'
+      time-to-live: PT5M
+    type: redis
 
 com:
   azki:

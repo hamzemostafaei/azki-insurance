@@ -5,6 +5,7 @@ import com.azki.insurance.domain.api.dto.UserDTO;
 import com.azki.insurance.domain.input.BaseCommandHandler;
 import com.azki.insurance.reservation.service.domain.api.command.ReserveNearestAvailableSlotCommand;
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
+import com.azki.insurance.reservation.service.domain.ports.input.reservation.caching.ReservationCacheEvictionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Date;
 public class ReserveNearestAvailableSlotCommandHandler extends BaseCommandHandler<ReserveNearestAvailableSlotCommand, CommandResult<AvailableSlotsDTO>> {
 
     private final SlotReservationHelper slotReservationHelper;
+    private final ReservationCacheEvictionService cacheEvictionService;
 
     @Override
     protected CommandResult<AvailableSlotsDTO> execute(ReserveNearestAvailableSlotCommand command) {
@@ -31,6 +33,9 @@ public class ReserveNearestAvailableSlotCommandHandler extends BaseCommandHandle
         }
         AvailableSlotsDTO nearestAvailableSlot = slotReservationHelper.getNearestAvailableSlot(startTime);
         AvailableSlotsDTO reservedSlot = slotReservationHelper.reserveSlot(user, nearestAvailableSlot);
+
+        cacheEvictionService.evictAvailableSlotsCache();
+
         return CommandResult.success(reservedSlot);
     }
 }

@@ -22,7 +22,7 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain bpmsUiSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/api/**")
+                .securityMatcher("/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests

@@ -7,6 +7,7 @@ import com.azki.insurance.reservation.service.domain.api.command.DeleteReservedS
 import com.azki.insurance.reservation.service.domain.api.dto.AvailableSlotsDTO;
 import com.azki.insurance.reservation.service.domain.api.dto.ReservedSlotsDTO;
 import com.azki.insurance.reservation.service.domain.api.dto.search.ReservedSlotsCriteriaDTO;
+import com.azki.insurance.reservation.service.domain.ports.input.reservation.caching.ReservationCacheEvictionService;
 import com.azki.insurance.reservation.service.domain.ports.output.AvailableSlotsRepository;
 import com.azki.insurance.reservation.service.domain.ports.output.ReservedSlotsRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class DeleteReservedSlotCommandHandler extends BaseCommandHandler<DeleteR
     private final ReservedSlotsRepository reservedSlotsRepository;
     private final SlotReservationHelper slotReservationHelper;
     private final AvailableSlotsRepository availableSlotsRepository;
+    private final ReservationCacheEvictionService cacheEvictionService;
 
     @Override
     protected CommandResult<Void> execute(DeleteReservedSlotCommand command) {
@@ -40,6 +42,8 @@ public class DeleteReservedSlotCommandHandler extends BaseCommandHandler<DeleteR
         slot.setIsReserved(false);
 
         availableSlotsRepository.save(slot);
+
+        cacheEvictionService.evictAvailableSlotsCache();
 
         return CommandResult.success();
     }

@@ -1,5 +1,6 @@
 package com.azki.insurance.domain.api.dto;
 
+import com.azki.insurance.common.core.data.BaseDTO;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -8,10 +9,10 @@ import java.sql.Timestamp;
 @Data
 @ToString
 @SuperBuilder
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseVersionedDTO {
+@EqualsAndHashCode(callSuper = false)
+public class BaseVersionedDTO extends BaseDTO {
     private Long version;
     private Timestamp creationDate;
     private Long creatorUserId;

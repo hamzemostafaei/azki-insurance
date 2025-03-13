@@ -3,6 +3,7 @@ package com.azki.insurance.domain.api.query;
 import com.azki.insurance.common.core.data.ErrorDTO;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryResult<D> {
+public class QueryResult<D> implements Serializable {
 
     private D data;
     private boolean successful;
