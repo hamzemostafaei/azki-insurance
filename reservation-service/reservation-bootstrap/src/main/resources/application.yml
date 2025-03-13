@@ -12,7 +12,7 @@ spring:
       auto-commit: false
     url: jdbc:oracle:thin:@//localhost:1521/ORCLPDB
     username: AZKI_RESERVATION
-    password: 123456
+    password: ENC(N6GBivaNYmNzM9Hg+hWzdEfvyn7cTaQQejuDiJn+yrqJtgrAvayczQjc5vJyfqB/)
   jpa:
     open-in-view: false
     hibernate.ddl-auto: none
@@ -67,3 +67,6 @@ springdoc:
   swagger-ui:
     enabled: true
 #    path: /api-doc/swagger-ui.html
+jasypt:
+  encryptor:
+    bean: propertiesEncryptor

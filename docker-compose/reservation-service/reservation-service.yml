@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  reservation-service-1:
+    image: ${GROUP_ID}/reservation.service:${SERVICE_VERSION:-latest}
+    container_name: reservation-service-1
+    hostname: reservation-service-1
+    user: root
+    ports:
+      - "8380:8380"
+    volumes:
+      - /u01/microservices/logs/reservation-service:/workspace/logs
+      - ./config/logback.xml:/workspace/config/logback.xml
+    environment:
+      - "JAVA_OPTS=-Xms128m -Xmx256m -Dlogging.config=file:/workspace/config/logback.xml"
+      - "SERVER_PORT=8380"
+      - "SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle_database:1521/ORCLPDB"
+      - "SPRING_DATASOURCE_USERNAME=AZKI_RESERVATION"
+      - "SPRING_DATASOURCE_PASSWORD=ENC(N6GBivaNYmNzM9Hg+hWzdEfvyn7cTaQQejuDiJn+yrqJtgrAvayczQjc5vJyfqB/)"
+      - "COM_AZKI_INSURANCE_NODE_ID=1"
+      - "SPRING_DATA_REDIS_HOST=172.18.0.1"
+      - "SPRING_DATA_REDIS_PORT=6379"
+      - "NODE_ID=1"
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+  reservation-service-2:
+    image: ${GROUP_ID}/reservation.service:${SERVICE_VERSION:-latest}
+    container_name: reservation-service-2
+    hostname: reservation-service-2
+    user: root
+    ports:
+      - "8381:8381"
+    volumes:
+      - /u01/microservices/logs/reservation-service:/workspace/logs
+      - ./config/logback.xml:/workspace/config/logback.xml
+    environment:
+      - "JAVA_OPTS=-Xms128m -Xmx256m -Dlogging.config=file:/workspace/config/logback.xml"
+      - "SERVER_PORT=8381"
+      - "SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle_database:1521/ORCLPDB"
+      - "SPRING_DATASOURCE_USERNAME=AZKI_RESERVATION"
+      - "SPRING_DATASOURCE_PASSWORD=ENC(N6GBivaNYmNzM9Hg+hWzdEfvyn7cTaQQejuDiJn+yrqJtgrAvayczQjc5vJyfqB/)"
+      - "COM_AZKI_INSURANCE_NODE_ID=2"
+      - "SPRING_DATA_REDIS_HOST=172.18.0.1"
+      - "SPRING_DATA_REDIS_PORT=6379"
+      - "NODE_ID=2"
+    networks:
+      - ${GLOBAL_NETWORK:-services}

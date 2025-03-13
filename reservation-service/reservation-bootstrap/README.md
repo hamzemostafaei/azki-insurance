@@ -1,0 +1,1 @@
+docker build -t com.azki.insurance/reservation.service:0.0.1-SNAPSHOT .
