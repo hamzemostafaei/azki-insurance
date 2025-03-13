@@ -48,6 +48,9 @@ spring:
       key-prefix: 'azki-insurance:'
       time-to-live: PT5M
     type: redis
+  session:
+    redis:
+      repository-type: default
 
 com:
   azki:
