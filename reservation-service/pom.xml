@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>reservation-application</module>
+        <module>reservation-presentation</module>
         <module>reservation-data-access</module>
         <module>reservation-bootstrap</module>
         <module>reservation-domain</module>

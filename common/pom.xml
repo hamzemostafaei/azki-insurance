@@ -12,7 +12,7 @@
     <artifactId>common</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>common-application</module>
+        <module>common-presentation</module>
         <module>common-bootstrap</module>
         <module>common-config-data</module>
         <module>common-core</module>

@@ -173,7 +173,7 @@
             <!-- local -->
             <dependency>
                 <groupId>com.azki.insurance</groupId>
-                <artifactId>common-application</artifactId>
+                <artifactId>common-presentation</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -218,7 +218,7 @@
             </dependency>
             <dependency>
                 <groupId>com.azki.insurance</groupId>
-                <artifactId>reservation-application</artifactId>
+                <artifactId>reservation-presentation</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

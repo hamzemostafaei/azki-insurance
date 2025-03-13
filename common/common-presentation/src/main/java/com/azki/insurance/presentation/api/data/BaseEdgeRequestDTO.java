@@ -1,0 +1,15 @@
+package com.azki.insurance.presentation.api.data;
+
+import com.azki.insurance.presentation.common.core.data.BaseDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public abstract class BaseEdgeRequestDTO extends BaseDTO {
+
+}

@@ -50,7 +50,7 @@ Below is a high-level diagram of the Reservation Service architecture:
 - **`common`**: Shared modules used across the project.
 
 - **`reservation-service`**: Modules for the reservation service:
-    - `reservation-application`: RESTful API endpoints.
+    - **`reservation-presentation`**: RESTful API endpoints.
     - **`reservation-bootstrap`**: Entry point and initialization logic.
     - **`reservation-data-access`**: Database interactions and repositories.
     - **`reservation-domain`**: Service-specific domain models.
