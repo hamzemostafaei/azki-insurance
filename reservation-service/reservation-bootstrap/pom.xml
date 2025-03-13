@@ -60,6 +60,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <outputDirectory>../../docker-compose/release</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
