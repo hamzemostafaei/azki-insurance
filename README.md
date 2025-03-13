@@ -57,7 +57,7 @@ Below is a high-level diagram of the Reservation Service architecture:
 
 - **`docker-compose`**: Houses Docker Compose configurations to manage multi-container services, including `reservation-service`.
 ### API Documentation
-http://localhost:8380/swagger-ui.html
+http://localhost:8381/swagger-ui/index.html
 
 ## Future Improvements
 - **Second-Level Caching**: Integrate Hibernate’s second-level cache with Redis to improve performance.
@@ -66,7 +66,7 @@ http://localhost:8380/swagger-ui.html
 - **Flyway**: Implement database migrations for version control.
 - **DevOps Tooling**: Develop a utility for managing encrypted passwords with Jasypt.
 - **Protobuf for Redis**: Use Protocol Buffers for efficient serialization in Redis.
-- **(RBAC) Authorization**
+- **(RBAC) Authorization**: Implementing a mechanism for role based authorization
 
 ## How to Build & Run
 
