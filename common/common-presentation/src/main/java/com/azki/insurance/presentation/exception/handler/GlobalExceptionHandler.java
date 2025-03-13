@@ -1,8 +1,8 @@
 package com.azki.insurance.presentation.exception.handler;
 
 import com.azki.insurance.presentation.api.data.BaseEdgeResponseDTO;
-import com.azki.insurance.presentation.common.core.data.ErrorCodeEnum;
-import com.azki.insurance.presentation.common.core.data.ErrorDTO;
+import com.azki.insurance.common.core.data.ErrorCodeEnum;
+import com.azki.insurance.common.core.data.ErrorDTO;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import jakarta.validation.ValidationException;

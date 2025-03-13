@@ -1,6 +1,6 @@
 package com.azki.insurance.presentation.api.data;
 
-import com.azki.insurance.presentation.common.core.data.ErrorDTO;
+import com.azki.insurance.common.core.data.ErrorDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,10 @@
 package com.azki.insurance.presentation.filters.logging;
 
 import com.azki.insurance.presentation.filters.body.extraction.IExchangeBodyExtractionEventHandler;
-import com.azki.insurance.presentation.common.app.config.CommonConfigData;
-import com.azki.insurance.presentation.common.app.config.LoggingConfigData;
-import com.azki.insurance.presentation.common.utility.LoggingUtil;
-import com.azki.insurance.presentation.common.utility.WebUtil;
+import com.azki.insurance.common.app.config.CommonConfigData;
+import com.azki.insurance.common.app.config.LoggingConfigData;
+import com.azki.insurance.common.utility.LoggingUtil;
+import com.azki.insurance.common.utility.WebUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import lombok.RequiredArgsConstructor;
