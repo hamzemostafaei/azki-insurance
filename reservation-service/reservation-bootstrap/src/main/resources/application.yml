@@ -56,7 +56,14 @@ com:
       ignored-path-patterns:
       serviceName: reservation-service
       logging:
-        non-logged-paths:
+        non-logged-paths: /swagger-ui/**,/v3/api-docs/**
         ignored-headers:
       search:
         page-size: 10
+springdoc:
+  api-docs:
+    enabled: true
+#    path: /api-doc/v3/api-docs
+  swagger-ui:
+    enabled: true
+#    path: /api-doc/swagger-ui.html
