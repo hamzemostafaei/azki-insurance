@@ -59,17 +59,23 @@ com:
       ignored-path-patterns:
       serviceName: reservation-service
       logging:
-        non-logged-paths: /swagger-ui/**,/v3/api-docs/**
+        non-logged-paths: ${com.azki.insurance.api-doc.path-prefix}/**
         ignored-headers:
       search:
         page-size: 10
+      api-doc:
+        path-prefix: /api-doc
+      admin-role-name: ADMIN
+      user-role-name: USERS
+      admin-user-id: 0
+
 springdoc:
   api-docs:
     enabled: true
-#    path: /api-doc/v3/api-docs
+    path: ${com.azki.insurance.api-doc.path-prefix}/v3/api-docs
   swagger-ui:
     enabled: true
-#    path: /api-doc/swagger-ui.html
+    path: ${com.azki.insurance.api-doc.path-prefix}/swagger-ui.html
 jasypt:
   encryptor:
     bean: propertiesEncryptor

@@ -7,5 +7,13 @@ import java.util.List;
 @ConfigurationProperties(prefix = "com.azki.insurance")
 public record CommonConfigData(Integer nodeId,
                                List<String> ignoredPathPatterns,
-                               String serviceName) {
+                               String serviceName,
+                               ApiDoc apiDoc,
+                               String adminRoleName,
+                               String userRoleName,
+                               Long adminUserId) {
+
+    public record ApiDoc(String pathPrefix) {
+    }
+
 }
