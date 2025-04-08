@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   reservation-service-1:
     image: ${GROUP_ID}/reservation.service:${SERVICE_VERSION:-latest}
